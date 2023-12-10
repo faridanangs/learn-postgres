@@ -1,0 +1,322 @@
+/// Type data enum (70)
+- digunaka untuk menentukan tipe data yang sudah fix seperti jenis kelamin, kategory dan sejenisnya
+- type data enum harus di buat terlebih dahulu, dan di tentukan value yang di perbolehkan
+- cara membuat type data enum: CREATE TYPE NAME_ENUM AS ENUM ('VALUE1', 'VALUE2');
+
+/// Null Value
+- null adalah ketika kita tidak mengisikan data ke dalam kolom
+- secara default, saat kita membuat kolom, kolom tersebut bisa bernilai null, jika kita tidak ingin menerima nilai null,
+	kita bisa menambah not null ketika kita membuat kolmnya
+
+/// TRUNCATE (24)
+- membuat ulang table
+
+/// Primary Key
+- saat kita membuat tabel, idealnya tiap tabel memiliki primary key.
+- primary key adalah id unix yang ada di sebuah tabel.
+- kita harus memilih kolom yang akan di jadikan sebuah primary key.
+
+/// Primary Key di Multiple Column
+- kita bisa membuat primari dengan kombinasi beberapa kolom.
+- di sarankan untuk membuat 1 kolom untuk menjadi primary key.
+- kecuali ketika kita membuat table yang berelasi MANY TO MANY.
+
+/// Alias (109)
+- alias berguna jika kita ingin mengubah nama kolom atau nama table ketika melakukan select data.
+- alias berguna ketika kita menggunakan JOIN.
+- alias untuk table berguna ketika nanti kita melakukan relasi dan berguna untuk menghindari nama colom yang sama di dalam table
+
+/// Where Oprator (124)
+- operator perbandingan (<, >, <=, >= , !=, =)
+- operator or dan and
+- like oprator
+	* like oprator bisa di gunkan untuk mencari data yang ada di dalam string.
+	* ini cocok jika kita ingin mencari data sebagian dalam string.
+	* like oprator ini sangat lambat dan tidak di sarankan jika datanya sudah banyak.
+	* like oprator ini casenya sangat sensitive, huruf besar dan kecil sangat berpengaruh, jika tidak ingin case sensitive use can use ilike.
+    # Like oprator contoh:
+	- LIKE a% = str dngan awalan a.
+	- LIKE %b = str dngan akhiran b.
+	- LIKE %nang% = str berisi nang.
+	- NOT LIKE = tidak LIKE.
+	- ilike tidak memperdulikan case sensitive
+
+- null oprator
+	* is null, artinya untuk mencari yang null.
+	* is not null, artinya mencari yang tidak null.
+
+- between oprator
+	* oprator ini lebih memdahkan dari pada menggunakan or dan and oprator
+    # Between oprator contoh:
+	- select from products where price between 10.000 and 20.000;
+	- tapa between. select from products where price >= 10.000 and price <= 20.000; tanpa between
+	- not between kebalikannya.
+
+- in oprator
+	* oprator ini bisa melakukan pencarian kolom dengan beberapa nilai.
+	* jika kita ingin mencari products dgn category makanan dan minuman, maka kita bisa menggunakan operator ini.
+	* untuk kebalikannya, kita bisa menggunakan not in
+    # Between oprator contoh:
+	- select * from products where category in ('makanan', 'minuman', 'permen', 'buah');
+	- select * from products where category not in ('makanan', 'minuman'); 
+
+- order by clause (162)
+	* untuk mengurutkan data ketika kita menggunakan perintah sql select, kita bisa menambahkan order by clause.
+	* oprator ini di gunakan untuk mengurutkan data berdasrkan kolom yang dipilih, dan jenis urutannya
+		- ASC :Kecil ke Besar.
+		- DESC :Besar ke Kecil.
+
+- limit clause (166)
+	* membatasi jumlah data yang di ambil menggunakan limit clause.
+	* selain membatasi, kita juga bisa meng-skip sejumlah data yang tidak ingin kita lihat.
+	* limit juga bisa di lakukan untuk melakukan paging di aplikasi dengan kombinasi offset.
+    # Limit clause contoh:
+	- select * from products where price > 0 order by id asc limit 3;
+
+- offset clause (169)
+	* oprasi ini di gunakan untuk meng-skip, tidak memperdulikan data di awal, dia akan meloncat sesuai dengan offset yang kita beri ke data selanjutnya.
+	* contoh di bawah seharusnya dia mendapat data ke 1,2 karna kita menggunakan offset 2 maka dia meng-skip data sebanyak dua kali dan dia akan mengambil data yang ke 3,4.
+     # Offset clause contoh:
+	- select * from products where price > 0 order by id asc limit 2 offset 2;
+
+/// Select Distinct (173)
+- untuk menghilangkan data duplikat, kita bisa menggunakan Select dengan tambahan Distint sebelum nama kolomnya.
+
+/// Matemaatika Function (-)
+- postgresql juga mendukung oprasi aritmatika
+- resource *https://www.postgresql.org/docs/9.5/functions-math.html
+
+/// Auto Increment (177)
+- postgresql memiliki tipe data number bernama serial, fitur ini akan secara otomatis mengembalikan nilai yang selalu naik ketika di panggil.
+- dengan serial kita tidak perlu memasukan data primary key secara manual, secara otomatis nilai primary ke akan selalu naik.
+- serial 'integer biasa', bigserial 'biginteger'.
+- untuk metihat nilai dari seria saat ini kita bisa menggunakan contoh di bawah
+    # AI contoh:
+	* currval = current value.
+	* admin_id_seq = nameTable_nameColumn_sequence
+	- select currval('admin_id_seq');
+
+/// String Function (195)
+- postgresql juga mendukung oprasi string function seperti lower() dll.
+- resource *https://www.postgresql.org/docs/9.1/functions-string.html
+
+/// date dan time function (198)
+- postgresql juga mendukung oprasi time dan timeStamp function.
+- resource *https://www.postgresql.org/docs/current/functions-datetime.html
+
+/// Control flow case (201)
+- mirip seperti if else di bahasa pemrograman tapi tidak sekomplek itu.
+
+/// aggregat function (219)
+- jika kita ingin melihat harga paling mahal, atau murah, atau rata-rata harga product, atau total jumlah data yang ada di dalam tabel.
+- aggregat func tidak bisa di gunakan dengan query biasa
+- resource *cari aggregat postgresql di google
+
+/// group by clause (225)
+- group by hanya bisa di gunakan untuk agregat saja.
+- ini berguna jika kita ingin melihat rata-rata atau total semua product tapi percategory.
+- aggregat func tidak bisa di gunakan dengan query biasa
+- dia membuat grup sesuai dengan jumlah data yang sama
+
+/// having claue (228)
+- ini di gunakan untuk melakukan filter terhadap data yang sudah kita grouping.
+- misal kita ingin menampilkan harga rata-rata per category, tapi yg harganya di atas 15.000.
+- jika menggunakan WHERE clause, hal ini tidak bisa di lakukan.
+- untuk memfilter hasil aggregat function, kit Hrus menggunakan having clause
+
+/// Constraint (241)
+- ini di gunakan untuk menjaga data di table tetap baik.
+- ini sangat bagus di tambahkan untuk menjaga jika terjadi valiadsi yang salah di program kita, sehingga data yang masuk di database tetap terjaga.
+# Unique Constraint (242)
+	- ini adalah constraint yang memastikan bahwa data kita tetap uniq.
+	- jika kita memasukan data duplikat psql akan menolak data tersebut.
+		
+# Chect Constraint (274) 
+	- ini di gunakan untuk kondisi pengecekan
+	- ini cocok untuk mengecek data sebelum di masukan ke db
+	- misl kita ingin memastikan harga harus di atas 1000
+	- maka kita bisa menggunakan constraint
+
+/// Index (286)
+- secara default postgres menyimpan data di dalam disk seperti table biasa.
+- hal ini menyebabkan pencarian data sangat lambat karna dia memncari dari atas sampa akhir, yang artinya semakin banyak datanya maka dia akan semakin lama.
+- kita bisa ubha cara penyimpanannya, agar mudah di cari menggunakan index.
+- saat membuat index postgres akan menyimpan data dalam bentuk struktur data B-Tree.
+- tidak hanya mempermudah dalam pencarian data, index juga akan mempermudah dalam melakukan pengurutan menggunakan b-tree.
+
+# Efek samping
+- akan mempercepat proses pencarian data, tapi memperlambar pproses manipulasi data(crud)
+- saat melakukan pencarian data usahakan kedua kolomnya adalah index supaya cepat jika salah satunya bukan index maka dia akan lelet karna bukan index
+
+# Tidak perlu index
+- Primary Key dan unique constraint akan di buatkan index secara otomatis.
+
+/// full text search (322)
+- ini lebih baik di gunakan daripada index karna tidak perlu mencari satu persatu datanya dari atas sampe akhir
+- kita bisa menggunakan type data tsvector untuk membuat index full-text search secara otomatis.
+
+///// Table Relationship (333)
+- relasi antar tabel
+- kita bisa melakukan relasi dari satu table ke tabel yang lainnya
+- saat membuat app penjualan, di brief penjualan pasti ada data barang. artinya tabel penjualan akan berelasi dengan tabel barang
+    ## Foreign Key (334)
+	- saat membuat relasi tabel, biasanya kita akan membuat sebuah kolom, sebagai refrensi ke tabel lainnya
+	- Misal: saat kita membuat tabel penjualan, di dlam tabel kita tambahkan kolom id_product sebagai refresnsi ke tabel product, yang berisi primary key di tabel product.
+	- kolom id ini biasa di sebut foreign key
+	- kita bisa menambah satu atau lebih foreign key ke dalam sebuah tabel
+	- membuat foreign key sama saja seperti membuat kolom biasa, hanya saja kita perlu mengasih tahu postgres bahwa itu adalah poreign key ke tabel lain
+    ## Keuntungan
+	- memastikan data yang kita masukan ke kolom tersebut harus tersedia di tabel refrencesnya
+	- saat menghapus data di tabel refrences, dia akan di cek apakah id nya di gunakan di foreign key tabel lain, jika iya secara otomatis postgres akan menolak proses delete di tabel refrences tersebut.
+    ## Behavior foreign key (363)
+	| Behavior         | On Delete |               | On Update |
+	 restrict           di tolak                     di tolak
+	 cascade            data akan di hapus           data akan ikut di ubah
+	 no action          data di biarkan              data di biarkan
+	 set null           di ubah jadi null            di ubah jadi null
+	 set default        di ubah jadi default value   di ubah jadi default value
+
+///// Join (379)
+- postgresql mendukung select langsung ke beberapa tabel sekaligun menggunakan join di sql select.
+- untuk melakukan join kita perlu menentukan tabel mana yang mrupakan refrensi dar tabel lain.
+- join cocok dengan foreign key, walaupun tidak di wajibkan menggunakan join dalam foreign key.
+- join bisa di lakukan lebih dari beberapa tabel.
+- semakin banyak yang di join maka performanya semakin menurun dan lambar, jadi harap bijak dalam menggunakannya.
+- idealnya kita melaakukan join jangan lebih dari 5, karna bisa berdampak pada performa query yang lambar.
+
+///// One to One relationship (406)
+- setiap data di tabel hanya boleh berelasi ke max 1 data tabel lainnya
+- tidak boleh ada relasi lebih lainnya
+- contohnya: kita membuat aplikasi toko online yang terdapat fitur walte, dan 1 customer, cuman boleh memiliki satu walet
+
+///// One to Many relationship (425
+- pembuatan ini sebernya hampir sama dengan one to one yang membedakannya adalah kita tidak perlu membuat foreign keynya karna datanya emang bisa di gunakan berkali kali ditambahkan di tabel relasinya
+
+//// Many to Many (458)
+- mantoman adalah relasi dimana ada relasi antara 2 tabel di mana tabel pertama bisa punya banyak relasi di tabel kedua dan tabel kedua bisa punya banyak relasi di tabel pertama.
+- contoh dari relasi many to many adalah relasi antara product dan penjualan, di mana setiap product bisa di jual berkali kali, dan setiap penjualan bisa lebih dari satu produk.
+   # Solusi mani to mani
+	* Membuat tabel relasi
+	 - solusi yang biasa di dalkukan jika terjadi relasi many ro many adalah, biasanya kita akan menambahkan 1 tabel di tengahnya.
+	 - tabel ini berfungsi sebagai jembatan untuk menggabungkan relasi many to many
+	 - isi tabel ini akan ada id dari tabel pertama dan table kedua, dalam kasus ini adalah id_product dan id_order
+	 - dengan demikian kita bisa menambah beberapa data ke dalam tabel relasi ini, sehingga satu product bisa dijual berkali kali dalam tabel order, dan satu order bisa membeli product lbih dri datu product
+
+/// Jenis jeni join (512)
+	# INNER join
+	 - ini default dari join
+	 - di akan mengambil data yang sesuai dengan relasinya
+	# LEFT join 
+	 - left join ini adalah mekanisme seperti inner join, namun semua data di tabel pertama akan diambil tidak dengan tabel ke dua.
+	 - jika ada yg tidak memiliki relasi di tabel kedua, maka hasilnya akan null
+	# RIG join
+	 - ini kebalikan dari left join, data yang akan di ambil yang kanan, pokoknya kebalikan dari left join.
+	# FULL join
+	 - ini adalah kombinasi righ dan left join, di mana dia akan mengambil semua data di tabel 1 dan 2
+
+/// subQuery di FROM (544)
+- selai di where claues, ini juga bisa di gunakan di from claue
+- misal kita ingin mencari data hasil dari query select, itu bisa kita lakukan di psql
+
+/// Set Oprator
+- ini adalah oprasi antara hasil dari dua select.
+	# macam-macam jenis oprasi se
+	* UNION
+	 - ini adalah oprasi menggabungkan 2 buah select query, di mana jika terdapat data yang duplikat, data duplikatnya akan di hapus dari hasil query
+	* UNION ALL
+	 - sama dengan union, hanya saja data duplikanya akan tetap di tampilkan.
+	* INTERSECT
+	 - tidak dalam keadaan duplikat
+	 - ini oprasi menggabungkan dua query, namun yg di ambil hanya data yg terdapat pada hasil query pertama dan kedua.
+	 - data yang tidak hanya di salah satu query, akan di hapus dari hail operasi intersect.
+	 - melihat customer mana yang sudah ada di guestbook
+	* EXCEPT
+	 - ini adalah oprasi di mana query perama akan di hilanykann oleh query je dua,
+	 - artinya jika ada daia ti queri pertama yang sama dengan daya yang ada di query ke dua, maka data tersebut akan di hapus dari hasil query except
+	 - melihat customer mana yang tidak ada di guestbook
+	* COntoh query seperti di bawah ini:	
+		select * (query 1)
+		SET oprator
+		select * (query 2)
+
+//// Transaction(600)
+- untuk melakukan perintah ke database lebih dari satu kali
+- untuk membatalkah perintah jika terjadi kesalahan pada salah satu perintah harapannya untuk menjaga data tetap konsisten.
+- jika terdapat satu saja proses gagal di transaction, maka secara otomatis printah" sebelumnya di batalkan
+- jika transaction success, maka semua printah akan di pastikan sukses
+	# transaction di postgresql
+	 * Start Transaction
+	  - memulai transaksi, proses slanjutnya akan di anggap trans sampai ada printah commit or rollback
+	 * Commit
+	  - menyimpan secara permanen seluruh proses transaksinya
+	 * Rollback
+	  - membatalkan secara permanen seluruh proses transaksinya
+	# Yang tidak bisa menggunakan Transaction
+	 - ddl perintah" yg di gunakan untuk merubah struktur dta, seperti membuat tabel, add colom, delete tabel dan database, dan sejenisnya
+	 - transaction hanya bisa di lakukan pada dml(data manipulation language). seperti INSERT, UPDATE, DELETE.
+
+
+//// Locking (635)
+- locking ini adalah proses mengunci di database
+- proses locking ini sangat penting di lakukan, agar data benar" terjamin konsistesinya
+- karna kenyataan aplikasi yang kita buat akan di gunakan oleh banyak orang, dan bisa saja mereka mengakses data yang sama, jika tidak ada proses locking, maka akan terjadi RACE CONDITON, yaitu proses balapan ketika mengubah data yang sama
+- contoh: ketika kita buat toko online, kita akan belapan memebeli barng yg sama, jika tdk terjga, bisa jadi kita salah mengupdate stock karna pada saat yang bersamaan banyak yg mlakukan prubahan stok barang
+	# Loking record
+	 - saat melakukan transaction, lalu kita melakukan proses perubahan data, data yang kita ubah akan secara otomatis akan di lock
+	 - hal ini membuat transaction sangat aman
+	 - sehingga di sarankan menggunakan transaction jika ingin emngubah lebih dari satu data di database
+	 - locking ini membuat proses prubahan yang di lakukan pihak lain akan di minta untuk menunggu
+	 - data akan di lock sampai kita melakukan commit ataurollback.
+	# Locking record manual
+	 - kita sering melakukan query terlebih dahulu seblum melakukan proses UPDATE misalnya
+	 - untuk melakukan locking secara manual, kita tambahkan FOR UPDATE setelah SELECT
+	 - saat sudah lock record yang kita select, maka jika ada proses lain akan melakukan SelUpdDel lagi, maka dia akan di suruh menuggu sampi kita selesai melakukan commit or rollback transaction
+
+
+//// Deadlock (661)
+- saat kita terlalu banyak melakukan locking, hati hati akan masalah yang bisa terjadi jaitu deadlock
+- deadlock adalah situasi ada 2 proses yang saling menuggu satu sama lain, namun data yang di tunggu di lock di proses lainnya, sehingga proses menunggunya tidak pernah selesai
+	# Contoh Deadlock
+	1. Proses 1 Melakukan SELECT FOR UPDATE untuk data 001
+	2. Proses 2 Melakukan SELECT FOR UPDATE untuk data 002
+	3. Proses 1 Melakukan SELECT FOR UPDATE untuk data 002, dan dia di minta untuk menunggu karna sedang di lock oleh Proses 2,
+	4. Proses 2 Melakukan SELECT FOR UPDATE untuk data 001, dan dia di minta untuk menunggu karna sedang di lock oleh Proses 1,
+	5. Akhirnya Proses1 dan Proses2 Saling menuggu
+	6. Deadlock terjadi
+
+/// Schema (678)
+
+/// root user
+- secara default postgresql membuat user utama sebagai super administration
+- namun best practicenya, saat kita menjalankan postgresql dengan aplikasi yang kita buat, sangat di sarankan ridak menggunakan user utama
+- lbih baik kita buat user  husus untuk setiap aplikasi, bahkan kita bisa batasi hak akses user tersebut, seperti hanya bisa melakukan select, dan tidak boleh melakukan insert, update, atau delete
+	# Hak akses user
+	 - dalam user management postgresql, kita akan mengenal istilah hak akses dari user
+	 - jika di postgresql nama user-nya = role. contoh: create role nang; drop role nang;
+	# kita bisa manipulasi role refrensi:https://www.postgresql.org/docs/8.1/sql-createrole.html
+	# jika sudah buat user dan ingin memanipulasinya refrensi: https://www.postgresql.org/docs/8.1/sql-alterrole.html
+	# daftar hak akses
+	 - menambah hak akses referensi: https://www.postgresql.org/docs/current/sql-grant.html
+	 - menghapus hak akses referensi: https://www.postgresql.org/docs/current/sql-revoke.html
+
+
+//// BackUp Database
+
+- saat membuat aplikasi menggunakan database, ada baiknya kita selalu melakukan backup data secara regular
+- untungnya postgres mendukung prosses backup database
+- untuk melakukan backup kita tidak menggunakan printah sql, melainkan postgresql menyediakan aplikasi husus untuk melakukan backup database, namanya pg_dump.
+- referensi aplikasi backup database: https://www.postgresql.org/docs/current/app-pgdump.html
+	# melakukan backup database
+	 - pg_dump --host=nama_hostnya --port=5432 --dbname=blajar --username=user_admin --format=plain --file=D:\Programming\Posgres\backup.sql
+
+//// Restore database
+- di postgresql juga kita bisa melakukan proses restore data dari file hasil backup
+- untuk melakukan restore database, kita bisa menggunakan aplikasi psql di postgresql
+	# melakukan restore 
+	 - psql --host=localhost --port=5432 --dbname=nama_db_restorenya --username=user_admin --file=tempat_file_backup_data_sql_disimpan
+- setelah kita melakukan restore dan menyimpannya di database yang kita buat, maka kita bisa mengakses database yang kita buat di database sebelumnya di database restore
+
+
+
+
+
