@@ -286,6 +286,9 @@
 
 /// Schema (678)
 
+
+///// Jika ingin membuat schema dan role harap buat di dalam role/user Yang memiliki akses SuperRole/Superuser jika tidak di akan mengalamu permision danied
+
 /// root user
 - secara default postgresql membuat user utama sebagai super administration
 - namun best practicenya, saat kita menjalankan postgresql dengan aplikasi yang kita buat, sangat di sarankan ridak menggunakan user utama
